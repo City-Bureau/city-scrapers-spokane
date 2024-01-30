@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import pytz
 from city_scrapers_core.constants import (
     CITY_COUNCIL,
     COMMISSION,
@@ -13,7 +14,7 @@ from city_scrapers_core.spiders import CityScrapersSpider
 class SvCityCouncilSpider(CityScrapersSpider):
     name = "sv_city_council"
     agency = "Spokane Valley City Council"
-    timezone = "America/Chicago"
+    timezone = "America/Los_Angeles"
     start_urls = ["https://spokanevalley.granicus.com/ViewPublisher.php?view_id=3"]
     custom_settings = {"ROBOTSTXT_OBEY": False}
     location = {
@@ -67,8 +68,17 @@ class SvCityCouncilSpider(CityScrapersSpider):
     def _parse_start(self, item):
         unix_timestamp_str = item.css('tr td[headers*="EventDate"] span::text').get()
         unix_timestamp = int(unix_timestamp_str)
-        start = datetime.fromtimestamp(unix_timestamp)
-        return start
+
+        # Create a timezone-aware datetime object in UTC
+        start_utc = datetime.utcfromtimestamp(unix_timestamp).replace(tzinfo=pytz.utc)
+
+        # Convert the UTC datetime to America/Los_Angeles time.
+        pacific_tz = pytz.timezone(self.timezone)
+        start_pacific = start_utc.astimezone(pacific_tz)
+
+        # Convert to a timezone-naive datetime object as expected by CityScrapersSpider
+        start_naive = start_pacific.replace(tzinfo=None)
+        return start_naive
 
     def _parse_links(self, item):
         """Parse or generate links."""

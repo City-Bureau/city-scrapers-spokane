@@ -8,6 +8,7 @@ scrapy = "*"
 city-scrapers-core = {ref = "main", git = "https://github.com/City-Bureau/city-scrapers-core.git", extras = ["azure"]}
 scrapy-wayback-middleware = "*"
 scrapy-sentry-errors = "1.0.0"
+pytz = "*"
 
 [dev-packages]
 freezegun = "*"
@@ -18,4 +19,3 @@ black = "*"
 
 [requires]
 python_version = "3.9"
-
