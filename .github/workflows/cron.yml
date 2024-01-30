@@ -2,8 +2,7 @@ name: Cron
 
 on:
   schedule:
-    # Set any time that you'd like scrapers to run (in UTC)
-    - cron: "27 6 * * *"
+    - cron: "7 10-23/12 * * *"
   workflow_dispatch:
 
 env:
