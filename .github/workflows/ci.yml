@@ -66,3 +66,9 @@ jobs:
           git diff-index --name-only --diff-filter=d $(git merge-base HEAD ${{ github.base_ref }}) | \
           grep -Pio '(?<=/spiders/).*(?=\.py)' | \
           xargs pipenv run scrapy validate
+
+      - name: Prevent workflow deactivation
+        uses: gautamkrishnar/keepalive-workflow@v1
+        with:
+          committer_username: "citybureau-bot"
+          committer_email: "documenters@citybureau.org"
