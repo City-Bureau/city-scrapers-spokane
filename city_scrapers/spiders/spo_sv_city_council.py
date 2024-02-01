@@ -33,6 +33,9 @@ class SvCityCouncilSpider(CityScrapersSpider):
             "div#GranicusMainViewContent > div#upcoming > table > tbody"
         )
         for item in meetings_table.css("tr"):
+            is_valid_meeting = self._check_valid_meeting(item)
+            if not is_valid_meeting:
+                continue
             title = self._parse_title(item)
             meeting = Meeting(
                 title=title,
@@ -49,6 +52,15 @@ class SvCityCouncilSpider(CityScrapersSpider):
             meeting["status"] = self._get_status(meeting)
             meeting["id"] = self._get_id(meeting)
             yield meeting
+
+    def _check_valid_meeting(self, item):
+        """Second column may contain a link that reads "In Progress" if the
+        meeting is underway. This row doesn't contain valid data.
+        """
+        in_progress_el = item.css("tr td:nth-child(2) a::text").get()
+        if in_progress_el and "in progress" in in_progress_el.lower():
+            return False
+        return True
 
     def _parse_title(self, item):
         """Parse meeting title."""
