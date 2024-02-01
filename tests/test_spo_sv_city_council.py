@@ -75,7 +75,7 @@ def test_source():
 def test_links():
     assert parsed_items[0]["links"] == [
         {
-            "href": "//spokanevalley.granicus.com/AgendaViewer.php?view_id=3&event_id=1314",  # noqa
+            "href": "https://spokanevalley.granicus.com/AgendaViewer.php?view_id=3&event_id=1314",  # noqa
             "title": "Agenda",
         }
     ]

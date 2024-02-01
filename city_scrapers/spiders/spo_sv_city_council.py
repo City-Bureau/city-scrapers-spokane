@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 
 import pytz
@@ -99,8 +100,15 @@ class SvCityCouncilSpider(CityScrapersSpider):
         for a in a_tags:
             href = a.css("::attr(href)").get()
             title = a.css("::text").get()
-            links.append({"href": href, "title": title})
+            valid_href = self._ensure_https_protocol(href)
+            links.append({"href": valid_href, "title": title})
         return links
+
+    def _ensure_https_protocol(self, url):
+        """Ensure the URL starts with 'https://', fixing incomplete
+        or incorrect parts."""
+        pattern = r"^(ttps://|tps://|ps://|s://|://|//|/)"
+        return re.sub(pattern, "https://", url, count=1)
 
     def _parse_source(self, response):
         return response.url
