@@ -6,11 +6,11 @@ from city_scrapers_core.constants import CITY_COUNCIL, TENTATIVE
 from city_scrapers_core.utils import file_response
 from freezegun import freeze_time
 
-from city_scrapers.spiders.sv_city_council import SvCityCouncilSpider
+from city_scrapers.spiders.spo_sv_city_council import SvCityCouncilSpider
 
 # File response setup
 test_response = file_response(
-    join(dirname(__file__), "files", "sv_city_council.html"),
+    join(dirname(__file__), "files", "spo_sv_city_council.html"),
     url="https://spokanevalley.granicus.com/ViewPublisher.php?view_id=3",
 )
 spider = SvCityCouncilSpider()
@@ -51,7 +51,7 @@ def test_time_notes():
 
 
 def test_id():
-    assert parsed_items[0]["id"] == "sv_city_council/202401301800/x/council_meeting"
+    assert parsed_items[0]["id"] == "spo_sv_city_council/202401301800/x/council_meeting"
 
 
 def test_status():

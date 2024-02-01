@@ -12,7 +12,7 @@ from city_scrapers_core.spiders import CityScrapersSpider
 
 
 class SvCityCouncilSpider(CityScrapersSpider):
-    name = "sv_city_council"
+    name = "spo_sv_city_council"
     agency = "Spokane Valley City Council"
     timezone = "America/Los_Angeles"
     start_urls = ["https://spokanevalley.granicus.com/ViewPublisher.php?view_id=3"]
