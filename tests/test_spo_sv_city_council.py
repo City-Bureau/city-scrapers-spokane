@@ -87,3 +87,22 @@ def test_classification():
 
 def test_all_day():
     assert parsed_items[0]["all_day"] is False
+
+
+def test_normalize_url():
+    fixtures = [
+        {
+            "url": "//another.website.com/agenda",
+            "expected": "https://another.website.com/agenda",
+        },
+        {
+            "url": "/agenda",
+            "expected": "https://spokanevalley.granicus.com/agenda",
+        },
+        {
+            "url": "https://www.somewebsite.org/agenda",
+            "expected": "https://www.somewebsite.org/agenda",
+        },
+    ]
+    for fixture in fixtures:
+        assert spider._normalize_url(fixture["url"]) == fixture["expected"]
