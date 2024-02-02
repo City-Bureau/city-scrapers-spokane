@@ -1,5 +1,5 @@
-import re
 from datetime import datetime
+from urllib.parse import urlparse
 
 import pytz
 from city_scrapers_core.constants import (
@@ -100,15 +100,27 @@ class SvCityCouncilSpider(CityScrapersSpider):
         for a in a_tags:
             href = a.css("::attr(href)").get()
             title = a.css("::text").get()
-            valid_href = self._ensure_https_protocol(href)
+            valid_href = self._normalize_url(href)
             links.append({"href": valid_href, "title": title})
         return links
 
-    def _ensure_https_protocol(self, url):
-        """Ensure the URL starts with 'https://', fixing incomplete
-        or incorrect parts."""
-        pattern = r"^(ttps://|tps://|ps://|s://|://|//|/)"
-        return re.sub(pattern, "https://", url, count=1)
-
     def _parse_source(self, response):
         return response.url
+
+    def _normalize_url(self, url):
+        """
+        Normalize a URL based on its initial character(s). Handles cases where the URL
+        starts with "//", "/", or is a full URL.
+        """
+        parsed_start_url = urlparse(self.start_urls[0])
+        if url.startswith("//"):
+            # Prepend the protocol of start_url
+            normalized_url = f"{parsed_start_url.scheme}:{url}"
+        elif url.startswith("/"):
+            # Prepend the protocol and domain of start_url
+            base_url = f"{parsed_start_url.scheme}://{parsed_start_url.netloc}"
+            normalized_url = f"{base_url}{url}"
+        else:
+            # URL does not match the specified cases, return as is
+            normalized_url = url
+        return normalized_url
