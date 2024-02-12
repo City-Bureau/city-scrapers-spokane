@@ -26,7 +26,7 @@ request_with_meta = Request(
     meta={"start_date": start_date, "meeting_id": "CYXL4V54CB3F"},
 )
 response_body = open(
-    join(dirname(__file__), "files", "spo_cvsd_detail.json"), "rb"
+    join(dirname(__file__), "files", "spo_cvsd_detail.html"), "rb"
 ).read()
 test_response_detail = HtmlResponse(
     url=request_with_meta.url,
