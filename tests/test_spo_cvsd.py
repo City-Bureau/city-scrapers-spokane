@@ -11,7 +11,6 @@ from city_scrapers.spiders.spo_cvsd import SpokSvsdSpider
 
 freezer = freeze_time("2024-02-07")
 freezer.start()
-freezer.stop()
 
 # set up response fixtures
 # Because _parse_detail expects meta data, we can't rely on the
@@ -40,6 +39,8 @@ test_response_detail = HtmlResponse(
 spider = SpokSvsdSpider()
 parsed_items = [item for item in spider.parse(test_response)]
 parsed_item = next(spider._parse_detail(test_response_detail))
+
+freezer.stop()
 
 
 def test_count():
