@@ -10,6 +10,7 @@ scrapy-wayback-middleware = "*"
 scrapy-sentry-errors = "1.0.0"
 pytz = "*"
 beautifulsoup4 = "*"
+python-dateutil = "*"
 
 [dev-packages]
 freezegun = "*"
