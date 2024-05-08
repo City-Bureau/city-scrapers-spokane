@@ -49,14 +49,12 @@ jobs:
         uses: actions/cache@v1
         with:
           path: .venv
-          key: pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('**/Pipfile.lock') }}
-            pip-${{ env.PYTHON_VERSION }}-
-            pip-
+          key: ${{ runner.os }}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('**/Pipfile.lock') }}
 
       - name: Install dependencies
         run: pipenv sync
         env:
-          PIPENV_DEFAULT_PYTHON_VERSION: ${{ env.PYTHON_VERSION }} 
+          PIPENV_DEFAULT_PYTHON_VERSION: ${{ env.PYTHON_VERSION }}
 
       - name: Run scrapers
         run: |
@@ -67,3 +65,9 @@ jobs:
         run: |
           export PYTHONPATH=$(pwd):$PYTHONPATH
           pipenv run scrapy combinefeeds -s LOG_ENABLED=True
+      
+      - name: Prevent workflow deactivation
+        uses: gautamkrishnar/keepalive-workflow@v1
+        with:
+          committer_username: "citybureau-bot"
+          committer_email: "documenters@citybureau.org"
